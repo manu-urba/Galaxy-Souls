@@ -210,7 +210,7 @@ public void OnAllPluginsLoaded()
 	bHosties = LibraryExists("lastrequest");
 	bMyJB = LibraryExists("myjailbreak");
 	bWarden = LibraryExists("warden");
-	bStore = LibraryExists("store");
+	bStore = LibraryExists("store") || LibraryExists("store_zephyrus");
 }
 
 public void OnLibraryRemoved(const char[] name)
@@ -221,7 +221,7 @@ public void OnLibraryRemoved(const char[] name)
 		bMyJB = false;
 	else if (StrEqual(name, "warden"))
 		bWarden = false;
-	else if (StrEqual(name, "store"))
+	else if (StrEqual(name, "store") || StrEqual(name, "store_zephyrus"))
 		bStore = false;
 }
 
@@ -233,7 +233,7 @@ public void OnLibraryAdded(const char[] name)
 		bMyJB = true;
 	else if (StrEqual(name, "warden"))
 		bWarden = true;
-	else if (StrEqual(name, "store"))
+	else if (StrEqual(name, "store") || StrEqual(name, "store_zephyrus"))
 		bStore = true;
 }
 
