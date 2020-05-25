@@ -6,6 +6,7 @@
 #include <lastrequest>
 #undef REQUIRE_PLUGIN
 #include <lastrequest>
+#include <myjailbreak>
 #define REQUIRE_PLUGIN
 
 public Plugin myinfo = 
@@ -36,6 +37,8 @@ int g_iBeamSprite;
 int g_iHaloSprite;
 int iTargetOfClient[MAXPLAYERS + 1];
 
+float fClientPos[MAXPLAYERS + 1][3];
+
 bool bSoul[MAXPLAYERS + 1];
 bool bPressingButtons[MAXPLAYERS + 1];
 bool bFoundTarget[MAXPLAYERS + 1];
@@ -43,9 +46,9 @@ bool bTimerActive[MAXPLAYERS + 1];
 bool bTimerSecActive[MAXPLAYERS + 1];
 bool bLRAvailable;
 bool bHosties;
+bool bMyJB;
 
 StringMap colors;
-StringMap orbs;
 StringMap targets;
 
 Handle hTimer[MAXPLAYERS + 1];
@@ -68,7 +71,6 @@ public void OnPluginStart()
 	CreateTimer(0.1, Timer_SpawnSouls, _, TIMER_REPEAT);
 	CreateTimer(0.5, Timer_SpawnSoulsSounds, _, TIMER_REPEAT);
 	colors = new StringMap();
-	orbs = new StringMap();
 	targets = new StringMap();
 	LoadTranslations("souls.phrases");
 	
@@ -196,18 +198,23 @@ public void CB_Simple(Database database, DBResultSet results, const char[] error
 public void OnAllPluginsLoaded()
 {
 	bHosties = LibraryExists("lastrequest");
+	bMyJB = LibraryExists("myjailbreak");
 }
 
 public void OnLibraryRemoved(const char[] name)
 {
 	if (StrEqual(name, "lastrequest"))
 		bHosties = false;
+	else if (StrEqual(name, "myjailbreak"))
+		bMyJB = false;
 }
 
 public void OnLibraryAdded(const char[] name)
 {
 	if (StrEqual(name, "lastrequest"))
 		bHosties = true;
+	else if (StrEqual(name, "myjailbreak"))
+		bMyJB = true;
 }
 
 public void OnMapStart()
@@ -237,36 +244,40 @@ public void Event_RoundStart(Event event, char[] name, bool dontBroadcast)
 
 public void Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
 {
-	if (bHosties && bLRAvailable)return;
+	if (bHosties && bLRAvailable || bMyJB && MyJailbreak_IsEventDayRunning())return;
 	int userid = event.GetInt("userid");
 	if (GetClientTeam(GetClientOfUserId(userid)) == 3 || GetClientTeam(GetClientOfUserId(userid)) == 2)
+	{
+		GetEntPropVector(GetEntPropEnt(GetClientOfUserId(userid), Prop_Send, "m_hRagdoll"), Prop_Send, "m_vecOrigin", fClientPos[GetClientOfUserId(userid)]);
+		fClientPos[GetClientOfUserId(userid)][2] += 30;
 		CreateTimer(1.5, Timer_Ragdoll, userid, TIMER_FLAG_NO_MAPCHANGE);
+	}	
 }
 
 public Action Timer_SpawnSouls(Handle timer)
 {
-	float fPos[3];
 	int color[4];
+	float fTempPos[3];
 	for (int i = 1; i <= MaxClients; i++)
 	{
+		if (!IsValidEntity(i))continue;
 		if (IsValidClient(i) && !IsPlayerAlive(i) && (GetClientTeam(i) == 3 && (cv_iSoulsTeam.IntValue == 2 || cv_iSoulsTeam.IntValue == 3) || GetClientTeam(i) == 2 && (cv_iSoulsTeam.IntValue == 1 || cv_iSoulsTeam.IntValue == 3)) && bSoul[i])
 		{
 			float buffer[12][3];
-			if (!IsValidEntity(i))continue;
-			GetEntPropVector(GetEntPropEnt(i, Prop_Send, "m_hRagdoll"), Prop_Send, "m_vecOrigin", fPos);
-			fPos[2] += 30;
-			Geo_NewIcosahedron(fPos, 25.0, buffer);
+			Geo_NewIcosahedron(fClientPos[i], 25.0, buffer);
 			char sClient[6];
 			IntToString(i, sClient, sizeof(sClient));
 			colors.GetArray(sClient, color, sizeof(color));
 			Link(buffer, 0.2, 0.7, color, true);
-			Geo_NewIcosahedron(fPos, 10.0, buffer);
+			Geo_NewIcosahedron(fClientPos[i], 10.0, buffer);
 			color =  { 255, 0, 0, 255 };
 			Link(buffer, 0.1, 0.5, color);
+			fTempPos[0] = fClientPos[i][0];
+			fTempPos[1] = fClientPos[i][1];
+			fTempPos[2] = fClientPos[i][2] + 16.0;
 		}
 		else bSoul[i] = false;
 	}
-	fPos[2] += 16;
 	for (int i = 1; i <= MaxClients; i++)
 	{
 		if (!IsValidClient(i, false))continue;
@@ -275,7 +286,7 @@ public Action Timer_SpawnSouls(Handle timer)
 		IntToString(i, sClient, sizeof(sClient));
 		if (targets.GetValue(sClient, target) && bPressingButtons[i])
 		{
-			TE_SetupBeamRingPoint(fPos, float(iRespTime[i] + 1) * 10.0, float(iRespTime[i] + 1) * 10.0 + 0.1, g_iBeamSprite, g_iHaloSprite, 0, 10, 0.1, 0.6, 0.6, color, 0, 0);
+			TE_SetupBeamRingPoint(fClientPos[i], float(iRespTime[i] + 1) * 10.0, float(iRespTime[i] + 1) * 10.0 + 0.1, g_iBeamSprite, g_iHaloSprite, 0, 10, 0.1, 0.6, 0.6, color, 0, 0);
 			TE_SendToAll();
 		}
 	}
@@ -287,12 +298,8 @@ public Action Timer_SpawnSoulsSounds(Handle timer)
 	{
 		if (IsValidClient(i) && !IsPlayerAlive(i) && (GetClientTeam(i) == 3 || GetClientTeam(i) == 2) && bSoul[i])
 		{
-			float fPos[3];
 			if (!IsValidEntity(i))continue;
-			int ragdoll = GetEntPropEnt(i, Prop_Send, "m_hRagdoll");
-			GetEntPropVector(ragdoll, Prop_Send, "m_vecOrigin", fPos);
-			fPos[2] += 30;
-			EmitAmbientSound("galaxy/orb/orb/energy_bg4.wav", fPos, ragdoll);
+			EmitAmbientSound("galaxy/orb/orb/energy_bg4.wav", fClientPos[i]);
 		}
 	}
 }
@@ -306,11 +313,7 @@ public Action Timer_Ragdoll(Handle timer, any userid)
 		IntToString(client, sClient, sizeof(sClient));
 		colors.SetArray(sClient, colorl[GetRandomInt(0, sizeof(colorl) - 1)], sizeof(colorl[]));
 		bSoul[client] = true;
-		float fPos[3];
-		GetEntPropVector(GetEntPropEnt(client, Prop_Send, "m_hRagdoll"), Prop_Send, "m_vecOrigin", fPos);
-		fPos[2] += 30;
-		orbs.SetArray(sClient, fPos, sizeof(fPos));
-		EmitAmbientSound("galaxy/orb/orb/orb_spawn.wav", fPos, GetEntPropEnt(client, Prop_Send, "m_hRagdoll"));
+		EmitAmbientSound("galaxy/orb/orb/orb_spawn.wav", fClientPos[client]);
 	}
 }
 
@@ -368,11 +371,8 @@ public Action Timer_Hint(Handle timer, DataPack pack)
 	int client = GetClientOfUserId(pack.ReadCell());
 	int target = GetClientOfUserId(pack.ReadCell());
 	int team = pack.ReadCell();
-	float fPos[3], tPos[3];
-	char sTarget[6];
-	IntToString(target, sTarget, sizeof(sTarget));
+	float fPos[3];
 	GetEntPropVector(client, Prop_Send, "m_vecOrigin", fPos);
-	orbs.GetArray(sTarget, tPos, sizeof(tPos));
 	
 	if (!iRespTime[client])
 	{
@@ -401,7 +401,7 @@ public Action Timer_Hint(Handle timer, DataPack pack)
 			}
 		}
 	}
-	if (GetVectorDistance(fPos, tPos) >= 50.0)
+	if (GetVectorDistance(fPos, fClientPos[target]) >= 50.0)
 	{
 		if (GetClientTeam(client) != GetClientTeam(target))
 		{
@@ -463,11 +463,10 @@ public Action Timer_Respawn(Handle timer, DataPack pack)
 	{
 		if (team == GetClientTeam(target))
 		{
-			float iPos[3];
-			GetEntPropVector(GetEntPropEnt(target, Prop_Send, "m_hRagdoll"), Prop_Send, "m_vecOrigin", iPos);
-			iPos[2] += 30;
 			CS_RespawnPlayer(target);
-			TeleportEntity(target, iPos);
+			TeleportEntity(target, fClientPos[target]);
+			if (GetPlayerWeaponSlot(target, CS_SLOT_KNIFE) == -1)
+				GivePlayerItem(target, "weapon_knife");
 			int r = GetRandomInt(0, 1);
 			EmitAmbientSound(r ? "galaxy/orb/CT_revive/revive_1.wav" : "galaxy/orb/CT_revive/revive_2.wav", fPos, client);
 		}
@@ -491,9 +490,7 @@ void OnPressButtons(int client, int team, float fPos[3])
 	for (int i = 1; i <= MaxClients; i++)
 	{
 		if (!IsValidClient(i) || IsPlayerAlive(i) || GetClientTeam(i) != 3 && GetClientTeam(i) != 2 || !bSoul[i])continue;
-		float iPos[3];
-		GetEntPropVector(GetEntPropEnt(i, Prop_Send, "m_hRagdoll"), Prop_Send, "m_vecOrigin", iPos);
-		float distance = GetVectorDistance(fPos, iPos);
+		float distance = GetVectorDistance(fPos, fClientPos[i]);
 		if (distance < fMinDist)
 		{
 			fMinDist = distance;
@@ -565,10 +562,7 @@ public void OnAvailableLR()
 	{
 		if (IsValidClient(i) && !IsPlayerAlive(i) && (GetClientTeam(i) == 3 || GetClientTeam(i) == 2) && bSoul[i])
 		{
-			float fPos[3];
-			int ragdoll = GetEntPropEnt(i, Prop_Send, "m_hRagdoll");
-			GetEntPropVector(ragdoll, Prop_Send, "m_vecOrigin", fPos);
-			EmitAmbientSound(sSound, fPos, ragdoll);
+			EmitAmbientSound(sSound, fClientPos[i]);
 		}
 		if (IsValidClient(i))
 			bSoul[i] = false;
