@@ -1,0 +1,81 @@
+"Phrases"
+{
+	"no longer respawning"
+	{
+		"#format"	"{1:N}"
+		"en"		"You're no longer respawning {1}"
+		"it"		"Hai smesso di rianimare {1}"
+	}
+	"you respawned"
+	{
+		"#format"	"{1:N}"
+		"en"		"You respawned {1}"
+		"it"		"Hai rianimato {1}"
+	}
+	"you have been respawned"
+	{
+		"#format"	"{1:N}"
+		"en"		"You have been respawned by {1}"
+		"it"		"{1} ti ha rianimato"
+	}
+	"soul stolen"
+	{
+		"#format"	"{1:N}"
+		"en"		"You stole {1}'s soul"
+		"it"		"Hai rubato l'anima a {1}"
+	}
+	"soul has been stolen"
+	{
+		"#format"	"{1:N}"
+		"en"		"Your soul has been stolen by {1}"
+		"it"		"{1} Ti ha rubato l'anima"
+	}
+	"no longer stealing"
+	{
+		"#format"	"{1:N}"
+		"en"		"You're no longer stealing {1}'s soul"
+		"it"		"Hai smesso di rubare l'anima a {1}"
+	}
+	"no longer respawning"
+	{
+		"#format"	"{1:N}"
+		"en"		"You're no longer respawning {1}"
+		"it"		"Hai smesso di rianimare {1}"
+	}
+	"no longer stealing passive"
+	{
+		"#format"	"{1:N}"
+		"en"		"{1} is not stealing your soul anymore"
+		"it"		"{1} ha smesso di rubarti l'anima"
+	}
+	"no longer respawning passive"
+	{
+		"#format"	"{1:N}"
+		"en"		"{1} is not respawning you anymore"
+		"it"		"{1} ha smesso di rianimarti"
+	}
+	"respawning"
+	{
+		"#format"	"{1:N}, {2:i}" //2 = seconds left
+		"en"		"You're respawning {1}: <font color='#fa6e37'>{2}"
+		"it"		"Stai rianimando {1}: <font color='#fa6e37'>{2}"
+	}
+	"respawning passive"
+	{
+		"#format"	"{1:N}, {2:i}"
+		"en"		"{1} is respawning you: <font color='#fa6e37'>{2}"
+		"it"		"{1} ti sta rianimando: <font color='#fa6e37'>{2}"
+	}
+	"stealing"
+	{
+		"#format"	"{1:N}, {2:i}"
+		"en"		"You're stealing {1}'s soul: <font color='#fa6e37'>{2}"
+		"it"		"Stai rubando l'anima a {1}: <font color='#fa6e37'>{2}"
+	}
+	"stealing passive"
+	{
+		"#format"	"{1:N}, {2:i}"
+		"en"		"{1} is stealing your soul: <font color='#fa6e37'>{2}"
+		"it"		"{1} ti sta rubando l'anima: <font color='#fa6e37'>{2}"
+	}
+}
