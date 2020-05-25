@@ -266,7 +266,6 @@ public void Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast
 {
 	if (bHosties && bLRAvailable || bMyJB && MyJailbreak_IsEventDayRunning())return;
 	int userid = event.GetInt("userid");
-	PrintToConsoleAll("%i %i %i %i", bWarden, cv_bWardenOnly.BoolValue, iWarden, GetClientOfUserId(userid));
 	if (bWarden && cv_bWardenOnly.BoolValue && iWarden != GetClientOfUserId(userid))return;
 	if (GetClientTeam(GetClientOfUserId(userid)) == 3 || GetClientTeam(GetClientOfUserId(userid)) == 2)
 	{
