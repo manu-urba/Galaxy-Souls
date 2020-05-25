@@ -266,7 +266,8 @@ public void Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast
 {
 	if (bHosties && bLRAvailable || bMyJB && MyJailbreak_IsEventDayRunning())return;
 	int userid = event.GetInt("userid");
-	if (bWarden && cv_bWardenOnly.BoolValue && iWarden == GetClientOfUserId(userid))return;
+	PrintToConsoleAll("%i %i %i %i", bWarden, cv_bWardenOnly.BoolValue, iWarden, GetClientOfUserId(userid));
+	if (bWarden && cv_bWardenOnly.BoolValue && iWarden != GetClientOfUserId(userid))return;
 	if (GetClientTeam(GetClientOfUserId(userid)) == 3 || GetClientTeam(GetClientOfUserId(userid)) == 2)
 	{
 		GetEntPropVector(GetEntPropEnt(GetClientOfUserId(userid), Prop_Send, "m_hRagdoll"), Prop_Send, "m_vecOrigin", fClientPos[GetClientOfUserId(userid)]);
@@ -614,6 +615,11 @@ public void OnAvailableLR()
 public void warden_OnWardenCreated(int client)
 {
 	iWarden = client;
+}
+
+public void warden_OnWardenRemoved(int client)
+{
+	iWarden = -1;
 }
 
 void Link(float buffer[12][3], float time, float width, int color[4], bool stella = false)
