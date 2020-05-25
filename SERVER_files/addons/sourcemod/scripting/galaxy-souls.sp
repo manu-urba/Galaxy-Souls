@@ -1,5 +1,4 @@
 #pragma semicolon 1
-#pragma newdecls required
 #include <sourcemod>
 #include <fragstocks>
 #include <geometry>
@@ -7,6 +6,7 @@
 #undef REQUIRE_PLUGIN
 #include <lastrequest>
 #include <myjailbreak>
+#include <warden>
 #define REQUIRE_PLUGIN
 
 public Plugin myinfo = 
@@ -36,6 +36,7 @@ int iRespTime[MAXPLAYERS + 1];
 int g_iBeamSprite;
 int g_iHaloSprite;
 int iTargetOfClient[MAXPLAYERS + 1];
+int iWarden = -1;
 
 float fClientPos[MAXPLAYERS + 1][3];
 
@@ -47,6 +48,7 @@ bool bTimerSecActive[MAXPLAYERS + 1];
 bool bLRAvailable;
 bool bHosties;
 bool bMyJB;
+bool bWarden;
 
 StringMap colors;
 StringMap targets;
@@ -59,6 +61,7 @@ ConVar cv_iSoulsTeam;
 ConVar cv_bSQL;
 ConVar cv_sDBconf;
 ConVar cv_bDisableAttack;
+ConVar cv_bWardenOnly;
 
 GlobalForward frw_OnSoulInteraction;
 
@@ -79,6 +82,7 @@ public void OnPluginStart()
 	cv_bSQL = CreateConVar("sm_souls_enable_sql", "0", "Enable support for SQL", _, true, 0.0, true, 1.0);
 	cv_sDBconf = CreateConVar("sm_souls_db_confname", "souls", "SQL database entry in configs/databases.cfg");
 	cv_bDisableAttack = CreateConVar("sm_souls_disable_attack", "1", "Disallow attacking while interacting with a soul", _, true, 0.0, true, 1.0);
+	cv_bWardenOnly = CreateConVar("sm_souls_warden_only", "0", "Only the warden's soul will be spawned", _, true, 0.0, true, 1.0);
 	
 	HookConVarChange(cv_bSQL, CvarChange);
 	
@@ -199,6 +203,7 @@ public void OnAllPluginsLoaded()
 {
 	bHosties = LibraryExists("lastrequest");
 	bMyJB = LibraryExists("myjailbreak");
+	bWarden = LibraryExists("warden");
 }
 
 public void OnLibraryRemoved(const char[] name)
@@ -207,6 +212,8 @@ public void OnLibraryRemoved(const char[] name)
 		bHosties = false;
 	else if (StrEqual(name, "myjailbreak"))
 		bMyJB = false;
+	else if (StrEqual(name, "warden"))
+		bWarden = false;
 }
 
 public void OnLibraryAdded(const char[] name)
@@ -215,6 +222,8 @@ public void OnLibraryAdded(const char[] name)
 		bHosties = true;
 	else if (StrEqual(name, "myjailbreak"))
 		bMyJB = true;
+	else if (StrEqual(name, "warden"))
+		bWarden = true;
 }
 
 public void OnMapStart()
@@ -246,6 +255,7 @@ public void Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast
 {
 	if (bHosties && bLRAvailable || bMyJB && MyJailbreak_IsEventDayRunning())return;
 	int userid = event.GetInt("userid");
+	if (bWarden && cv_bWardenOnly.BoolValue && iWarden == GetClientOfUserId(userid))return;
 	if (GetClientTeam(GetClientOfUserId(userid)) == 3 || GetClientTeam(GetClientOfUserId(userid)) == 2)
 	{
 		GetEntPropVector(GetEntPropEnt(GetClientOfUserId(userid), Prop_Send, "m_hRagdoll"), Prop_Send, "m_vecOrigin", fClientPos[GetClientOfUserId(userid)]);
@@ -264,6 +274,7 @@ public Action Timer_SpawnSouls(Handle timer)
 		if (!IsValidEntity(i))continue;
 		if (IsValidClient(i) && !IsPlayerAlive(i) && (GetClientTeam(i) == 3 && (cv_iSoulsTeam.IntValue == 2 || cv_iSoulsTeam.IntValue == 3) || GetClientTeam(i) == 2 && (cv_iSoulsTeam.IntValue == 1 || cv_iSoulsTeam.IntValue == 3)) && bSoul[i])
 		{
+			if (bWarden && cv_bWardenOnly.BoolValue && iWarden == i)continue;
 			float buffer[12][3];
 			Geo_NewIcosahedron(fClientPos[i], 25.0, buffer);
 			char sClient[6];
@@ -571,6 +582,11 @@ public void OnAvailableLR()
 		if (IsValidClient(i))
 			bSoul[i] = false;
 	}
+}
+
+public void warden_OnWardenCreated(int client)
+{
+	iWarden = client;
 }
 
 void Link(float buffer[12][3], float time, float width, int color[4], bool stella = false)
