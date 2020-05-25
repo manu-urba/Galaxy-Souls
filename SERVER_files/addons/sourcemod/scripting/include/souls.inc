@@ -35,3 +35,13 @@ native int Souls_GetClientStolenSouls(char[] sSteam64);
  * @param        Client Steam64ID.
  */
 native int Souls_GetClientRespawnedClients(char[] sSteam64);
+
+
+/**
+ * Called when a client interact (respawn or steal) with a soul.
+ *
+ * @param client		Client Index.
+ *
+ * @noreturn
+ */
+forward void Souls_OnSoulInteraction(int client)
