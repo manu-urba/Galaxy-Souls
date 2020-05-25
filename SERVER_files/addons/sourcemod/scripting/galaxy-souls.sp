@@ -285,7 +285,7 @@ public Action Timer_SpawnSouls(Handle timer)
 		if (!IsValidEntity(i))continue;
 		if (IsValidClient(i) && !IsPlayerAlive(i) && (GetClientTeam(i) == 3 && (cv_iSoulsTeam.IntValue == 2 || cv_iSoulsTeam.IntValue == 3) || GetClientTeam(i) == 2 && (cv_iSoulsTeam.IntValue == 1 || cv_iSoulsTeam.IntValue == 3)) && bSoul[i])
 		{
-			if (bWarden && cv_bWardenOnly.BoolValue && iWarden == i)continue;
+			if (bWarden && cv_bWardenOnly.BoolValue && iWarden != i)continue;
 			float buffer[12][3];
 			Geo_NewIcosahedron(fClientPos[i], 25.0, buffer);
 			char sClient[6];
