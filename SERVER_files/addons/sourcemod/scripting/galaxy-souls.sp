@@ -55,6 +55,7 @@ ConVar cv_iInteractionTime;
 ConVar cv_iSoulsTeam;
 ConVar cv_bSQL;
 ConVar cv_sDBconf;
+ConVar cv_bDisableAttack;
 
 GlobalForward frw_OnSoulInteraction;
 
@@ -75,6 +76,7 @@ public void OnPluginStart()
 	cv_iSoulsTeam = CreateConVar("sm_souls_teams", "3", "For which teams should souls be spawned (1 = only Ts, 2 = only CTs, 3 = BOTH)", _, true, 1.0, true, 3.0); //I guess only works for csgo
 	cv_bSQL = CreateConVar("sm_souls_enable_sql", "0", "Enable support for SQL", _, true, 0.0, true, 1.0);
 	cv_sDBconf = CreateConVar("sm_souls_db_confname", "souls", "SQL database entry in configs/databases.cfg");
+	cv_bDisableAttack = CreateConVar("sm_souls_disable_attack", "1", "Disallow attacking while interacting with a soul", _, true, 0.0, true, 1.0);
 	
 	HookConVarChange(cv_bSQL, CvarChange);
 	
@@ -317,7 +319,7 @@ public Action OnPlayerRunCmd(int client, int & buttons, int & impulse, float vel
 	float fPos[3];
 	GetClientAbsOrigin(client, fPos);
 	fPos[2] += 30;
-	if (bPressingButtons[client] && bFoundTarget[client] && buttons & IN_ATTACK)
+	if (bPressingButtons[client] && bFoundTarget[client] && buttons & IN_ATTACK && cv_bDisableAttack.BoolValue)
 		buttons &= ~IN_ATTACK;
 	if (buttons & IN_USE == IN_USE && g_oldButtons[client] & IN_USE != IN_USE && buttons & IN_DUCK)
 	{
