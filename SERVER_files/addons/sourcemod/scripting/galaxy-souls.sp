@@ -256,6 +256,7 @@ public void Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast
 
 public Action Timer_SpawnSouls(Handle timer)
 {
+	if (bHosties && bLRAvailable || bMyJB && MyJailbreak_IsEventDayRunning())return Plugin_Continue;
 	int color[4];
 	float fTempPos[3];
 	for (int i = 1; i <= MaxClients; i++)
@@ -290,6 +291,7 @@ public Action Timer_SpawnSouls(Handle timer)
 			TE_SendToAll();
 		}
 	}
+	return Plugin_Continue;
 }
 
 public Action Timer_SpawnSoulsSounds(Handle timer)
@@ -306,6 +308,7 @@ public Action Timer_SpawnSoulsSounds(Handle timer)
 
 public Action Timer_Ragdoll(Handle timer, any userid)
 {
+	if (bHosties && bLRAvailable)return Plugin_Stop;
 	int client = GetClientOfUserId(userid);
 	if (IsValidClient(client) && !IsPlayerAlive(client) && client)
 	{
@@ -315,6 +318,7 @@ public Action Timer_Ragdoll(Handle timer, any userid)
 		bSoul[client] = true;
 		EmitAmbientSound("galaxy/orb/orb/orb_spawn.wav", fClientPos[client]);
 	}
+	return Plugin_Stop;
 }
 
 public Action OnPlayerRunCmd(int client, int & buttons, int & impulse, float vel[3], float angles[3], int & weapon, int & subtype, int & cmdnum, int & tickcount, int & seed, int mouse[2])
