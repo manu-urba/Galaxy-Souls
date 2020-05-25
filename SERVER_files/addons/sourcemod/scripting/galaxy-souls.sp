@@ -431,15 +431,15 @@ public Action Timer_Hint(Handle timer, DataPack pack)
 	}
 	if (team == GetClientTeam(target))
 	{
-		iRespTime[client]--;
 		PrintHintText(client, "<font color='#ffc39e'>%t", "respawning", target, iRespTime[client]);
 		PrintHintText(target, "<font color='#ffc39e'>%t", "respawning passive", client, iRespTime[client]);
+		iRespTime[client]--;
 	}
 	else if (team != GetClientTeam(target))
 	{
-		iRespTime[client]--;
 		PrintHintText(client, "<font color='#ffc39e'>%t", "stealing", target, iRespTime[client]);
 		PrintHintText(target, "<font color='#ffc39e'>%t", "stealing passive", client, iRespTime[client]);
+		iRespTime[client]--;
 	}
 	return Plugin_Continue;
 }
@@ -537,6 +537,20 @@ void OnPressButtons(int client, int team, float fPos[3])
 		bTimerActive[client] = true;
 		bTimerSecActive[client] = true;
 		iRespTime[client] = cv_iInteractionTime.IntValue;
+		if (!cv_iInteractionTime.IntValue)
+		{
+			pack[1].Close();
+			PrintHintText(client, "<font color='#fa6e37'>%t", "you respawned", nearest);
+			PrintHintText(nearest, "<font color='#fa6e37'>%t", "you have been respawned", client);
+			if (cv_bSQL)
+			{
+				char sQuery[4028], sSteam64[32];
+				GetClientAuthId(client, AuthId_SteamID64, sSteam64, sizeof(sSteam64));
+				db.Format(sQuery, sizeof(sQuery), "INSERT INTO `users` (`steam64`, `nick`, `respawned_clients`) VALUES ('%s', '%N', '1') ON DUPLICATE KEY UPDATE `respawned_clients` = `respawned_clients` + '1'", sSteam64, client);
+				db.Query(CB_Simple, sQuery);
+			}
+			return;
+		}	
 		hSecTimer[client] = CreateTimer(1.0, Timer_Hint, pack[1], TIMER_FLAG_NO_MAPCHANGE | TIMER_REPEAT);
 		TriggerTimer(hSecTimer[client]);
 	}
