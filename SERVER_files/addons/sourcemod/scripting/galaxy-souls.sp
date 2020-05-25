@@ -459,7 +459,7 @@ public Action Timer_Respawn(Handle timer, DataPack pack)
 	char sClient[6];
 	IntToString(client, sClient, sizeof(sClient));
 	targets.SetValue(sClient, 0);
-	if (/*IsValidClient(target) && */!IsPlayerAlive(target))
+	if (IsValidClient(target) && !IsPlayerAlive(target))
 	{
 		if (team == GetClientTeam(target))
 		{
