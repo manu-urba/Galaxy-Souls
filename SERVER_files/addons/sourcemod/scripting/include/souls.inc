@@ -41,7 +41,8 @@ native int Souls_GetClientRespawnedClients(char[] sSteam64);
  * Called when a client interact (respawn or steal) with a soul.
  *
  * @param client		Client Index.
+ * @param target		Target Index which who the client is interacting with.
  *
  * @noreturn
  */
-forward void Souls_OnSoulInteraction(int client)
+forward void Souls_OnSoulInteraction(int client, int target)

@@ -103,7 +103,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	RegPluginLibrary("souls");
 	CreateNative("Souls_GetClientStolenSouls", Native_GetClientStolenSouls);
 	CreateNative("Souls_GetClientRespawnedClients", Native_GetClientRespawnedClients);
-	frw_OnSoulInteraction = CreateGlobalForward("Souls_OnSoulInteraction", ET_Ignore, Param_Cell);
+	frw_OnSoulInteraction = CreateGlobalForward("Souls_OnSoulInteraction", ET_Ignore, Param_Cell, Param_Cell);
 	return APLRes_Success;
 }
 
@@ -510,6 +510,7 @@ void OnPressButtons(int client, int team, float fPos[3])
 		}
 		Call_StartForward(frw_OnSoulInteraction);
 		Call_PushCell(client);
+		Call_PushCell(nearest);
 		Call_Finish();
 		char sClient[6];
 		IntToString(client, sClient, sizeof(sClient));
