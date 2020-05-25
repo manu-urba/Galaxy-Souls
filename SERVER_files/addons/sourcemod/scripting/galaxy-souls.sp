@@ -180,7 +180,7 @@ public int Native_ToggleSoul(Handle plugin, int params)
 
 public void CB_connect(Database database, const char[] error, any data)
 {
-	if (strlen(error))
+	if (database == null)
 		SetFailState(error);
 	LogMessage("Database connection established");
 	db = database;
@@ -189,7 +189,7 @@ public void CB_connect(Database database, const char[] error, any data)
 
 public void CB_Simple(Database database, DBResultSet results, const char[] error, any data)
 {
-	if (strlen(error))
+	if (database == null)
 		SetFailState(error);
 }
 
