@@ -7,6 +7,7 @@
 #include <lastrequest>
 #include <myjailbreak>
 #include <warden>
+#include <store>
 #define REQUIRE_PLUGIN
 
 public Plugin myinfo = 
@@ -49,6 +50,7 @@ bool bLRAvailable;
 bool bHosties;
 bool bMyJB;
 bool bWarden;
+bool bStore;
 
 StringMap colors;
 StringMap targets;
@@ -62,6 +64,8 @@ ConVar cv_bSQL;
 ConVar cv_sDBconf;
 ConVar cv_bDisableAttack;
 ConVar cv_bWardenOnly;
+ConVar cv_iCreditsForRespawn;
+ConVar cv_iCreditsForSteal;
 
 GlobalForward frw_OnSoulInteraction;
 
@@ -83,6 +87,8 @@ public void OnPluginStart()
 	cv_sDBconf = CreateConVar("sm_souls_db_confname", "souls", "SQL database entry in configs/databases.cfg");
 	cv_bDisableAttack = CreateConVar("sm_souls_disable_attack", "1", "Disallow attacking while interacting with a soul", _, true, 0.0, true, 1.0);
 	cv_bWardenOnly = CreateConVar("sm_souls_warden_only", "0", "Only the warden's soul will be spawned", _, true, 0.0, true, 1.0);
+	cv_iCreditsForRespawn = CreateConVar("sm_souls_credits_on_respawn", "0", "Store credits a client will get respawning a player", _, true, 0.0);
+	cv_iCreditsForSteal = CreateConVar("sm_souls_credits_on_steal", "0", "Store credits a client will get stealing a player's soul", _, true, 0.0);
 	
 	HookConVarChange(cv_bSQL, CvarChange);
 	
@@ -204,6 +210,7 @@ public void OnAllPluginsLoaded()
 	bHosties = LibraryExists("lastrequest");
 	bMyJB = LibraryExists("myjailbreak");
 	bWarden = LibraryExists("warden");
+	bStore = LibraryExists("store");
 }
 
 public void OnLibraryRemoved(const char[] name)
@@ -214,6 +221,8 @@ public void OnLibraryRemoved(const char[] name)
 		bMyJB = false;
 	else if (StrEqual(name, "warden"))
 		bWarden = false;
+	else if (StrEqual(name, "store"))
+		bStore = false;
 }
 
 public void OnLibraryAdded(const char[] name)
@@ -224,6 +233,8 @@ public void OnLibraryAdded(const char[] name)
 		bMyJB = true;
 	else if (StrEqual(name, "warden"))
 		bWarden = true;
+	else if (StrEqual(name, "store"))
+		bStore = true;
 }
 
 public void OnMapStart()
@@ -393,7 +404,15 @@ public Action Timer_Hint(Handle timer, DataPack pack)
 	{
 		if (team == GetClientTeam(target))
 		{
-			PrintHintText(client, "<font color='#fa6e37'>%t", "you respawned", target);
+			if (bStore && cv_iCreditsForRespawn.BoolValue)
+			{
+				PrintHintText(client, "<font color='#fa6e37'>%t", "you respawned and got credits", cv_iCreditsForRespawn.IntValue, target);
+				Store_SetClientCredits(client, Store_GetClientCredits(client) + cv_iCreditsForRespawn.IntValue);
+			}
+			else
+			{
+				PrintHintText(client, "<font color='#fa6e37'>%t", "you respawned", target);
+			}
 			PrintHintText(target, "<font color='#fa6e37'>%t", "you have been respawned", client);
 			if (cv_bSQL)
 			{
@@ -405,7 +424,15 @@ public Action Timer_Hint(Handle timer, DataPack pack)
 		}
 		else if (team != GetClientTeam(target))
 		{
-			PrintHintText(client, "<font color='#fa6e37'>%t", "soul stolen", target);
+			if (bStore && cv_iCreditsForSteal.BoolValue)
+			{
+				PrintHintText(client, "<font color='#fa6e37'>%t", "soul stolen and got credits", cv_iCreditsForSteal.IntValue, target);
+				Store_SetClientCredits(client, Store_GetClientCredits(client) + cv_iCreditsForSteal.IntValue);
+			}
+			else
+			{
+				PrintHintText(client, "<font color='#fa6e37'>%t", "soul stolen", target);
+			}
 			PrintHintText(target, "<font color='#fa6e37'>%t", "soul has been stolen", client);
 			if (cv_bSQL)
 			{

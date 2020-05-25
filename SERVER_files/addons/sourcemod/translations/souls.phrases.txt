@@ -12,6 +12,12 @@
 		"en"		"You respawned {1}"
 		"it"		"Hai rianimato {1}"
 	}
+	"you respawned and got credits"
+	{
+		"#format"	"{1:i},{2:N}"
+		"en"		"You got {1} credits for respawning {2}"
+		"it"		"Hai ricevuto {1} crediti per aver rianimato {2}"
+	}
 	"you have been respawned"
 	{
 		"#format"	"{1:N}"
@@ -23,6 +29,12 @@
 		"#format"	"{1:N}"
 		"en"		"You stole {1}'s soul"
 		"it"		"Hai rubato l'anima a {1}"
+	}
+	"soul stolen and got credits"
+	{
+		"#format"	"{1:i},{2:N}"
+		"en"		"You got {1} credits for stealing {2}'s soul"
+		"it"		"Hai ricevuto {1} crediti per aver rubato l'anima a {2}"
 	}
 	"soul has been stolen"
 	{
