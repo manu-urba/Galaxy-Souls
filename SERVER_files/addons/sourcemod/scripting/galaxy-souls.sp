@@ -103,6 +103,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	RegPluginLibrary("souls");
 	CreateNative("Souls_GetClientStolenSouls", Native_GetClientStolenSouls);
 	CreateNative("Souls_GetClientRespawnedClients", Native_GetClientRespawnedClients);
+	CreateNative("Souls_ToggleSoul", Native_ToggleSoul);
 	frw_OnSoulInteraction = CreateGlobalForward("Souls_OnSoulInteraction", ET_Ignore, Param_Cell, Param_Cell);
 	return APLRes_Success;
 }
@@ -167,6 +168,12 @@ public int Native_GetClientRespawnedClients(Handle plugin, int params)
 	}
 	SQL_UnlockDatabase(db);
 	return respawns;
+}
+
+public int Native_ToggleSoul(Handle plugin, int params)
+{
+	bSoul[GetNativeCell(1)] = GetNativeCell(2);
+	return 0;
 }
 
 public void CB_connect(Database database, const char[] error, any data)

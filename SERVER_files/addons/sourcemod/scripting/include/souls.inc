@@ -36,6 +36,14 @@ native int Souls_GetClientStolenSouls(char[] sSteam64);
  */
 native int Souls_GetClientRespawnedClients(char[] sSteam64);
 
+/** 
+ * Toggles soul for a dead player.
+ *
+ * @param        Client Index.
+ * @param        true to enable, false to disable.
+ */
+native void Souls_ToggleSoul(int client, bool toggle)
+
 
 /**
  * Called when a client interact (respawn or steal) with a soul.
