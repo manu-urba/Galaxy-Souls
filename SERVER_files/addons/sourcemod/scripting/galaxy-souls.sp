@@ -309,7 +309,7 @@ public Action Timer_SpawnSouls(Handle timer)
 		IntToString(i, sClient, sizeof(sClient));
 		if (targets.GetValue(sClient, target) && bPressingButtons[i])
 		{
-			TE_SetupBeamRingPoint(fClientPos[i], float(iRespTime[i] + 1) * 10.0, float(iRespTime[i] + 1) * 10.0 + 0.1, g_iBeamSprite, g_iHaloSprite, 0, 10, 0.1, 0.6, 0.6, color, 0, 0);
+			TE_SetupBeamRingPoint(fTempPos, float(iRespTime[i] + 1) * 10.0, float(iRespTime[i] + 1) * 10.0 + 0.1, g_iBeamSprite, g_iHaloSprite, 0, 10, 0.1, 0.6, 0.6, color, 0, 0);
 			TE_SendToAll();
 		}
 	}
@@ -414,7 +414,7 @@ public Action Timer_Hint(Handle timer, DataPack pack)
 				PrintHintText(client, "<font color='#fa6e37'>%t", "you respawned", target);
 			}
 			PrintHintText(target, "<font color='#fa6e37'>%t", "you have been respawned", client);
-			if (cv_bSQL)
+			if (cv_bSQL.BoolValue)
 			{
 				char sQuery[4028], sSteam64[32];
 				GetClientAuthId(client, AuthId_SteamID64, sSteam64, sizeof(sSteam64));
@@ -434,7 +434,7 @@ public Action Timer_Hint(Handle timer, DataPack pack)
 				PrintHintText(client, "<font color='#fa6e37'>%t", "soul stolen", target);
 			}
 			PrintHintText(target, "<font color='#fa6e37'>%t", "soul has been stolen", client);
-			if (cv_bSQL)
+			if (cv_bSQL.BoolValue)
 			{
 				char sQuery[4028], sSteam64[32];
 				GetClientAuthId(client, AuthId_SteamID64, sSteam64, sizeof(sSteam64));
@@ -581,7 +581,7 @@ void OnPressButtons(int client, int team, float fPos[3])
 			pack[1].Close();
 			PrintHintText(client, "<font color='#fa6e37'>%t", "you respawned", nearest);
 			PrintHintText(nearest, "<font color='#fa6e37'>%t", "you have been respawned", client);
-			if (cv_bSQL)
+			if (cv_bSQL.BoolValue)
 			{
 				char sQuery[4028], sSteam64[32];
 				GetClientAuthId(client, AuthId_SteamID64, sSteam64, sizeof(sSteam64));
