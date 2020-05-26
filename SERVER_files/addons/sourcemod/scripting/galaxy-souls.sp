@@ -140,7 +140,7 @@ public int Native_GetClientStolenSouls(Handle plugin, int params)
 	if (st == INVALID_HANDLE)
 	{
 		SQL_UnlockDatabase(db);
-		return ThrowNativeError(SP_ERROR_NATIVE, error);
+		return ThrowNativeError(SP_ERROR_NATIVE, "Invalid steam64");
 	}
 	SQL_Execute(st);
 	if (SQL_FetchRow(st))
