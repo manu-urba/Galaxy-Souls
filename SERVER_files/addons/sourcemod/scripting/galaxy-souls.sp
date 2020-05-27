@@ -2,7 +2,6 @@
 #include <sourcemod>
 #include <fragstocks>
 #include <geometry>
-#include <lastrequest>
 #undef REQUIRE_PLUGIN
 #include <lastrequest>
 #include <myjailbreak>
@@ -66,6 +65,9 @@ ConVar cv_bDisableAttack;
 ConVar cv_bWardenOnly;
 ConVar cv_iCreditsForRespawn;
 ConVar cv_iCreditsForSteal;
+ConVar cv_bEnableSteal;
+ConVar cv_bEnableRespawn;
+ConVar cv_bDisableOnLR;
 
 GlobalForward frw_OnSoulInteraction;
 
@@ -74,7 +76,7 @@ Database db;
 public void OnPluginStart()
 {
 	HookEvent("player_death", Event_PlayerDeath);
-	HookEvent("round_start", Event_RoundStart, EventHookMode_PostNoCopy);
+	HookEvent("round_end", Event_RoundEnd, EventHookMode_PostNoCopy);
 	CreateTimer(0.1, Timer_SpawnSouls, _, TIMER_REPEAT);
 	CreateTimer(0.5, Timer_SpawnSoulsSounds, _, TIMER_REPEAT);
 	colors = new StringMap();
@@ -89,6 +91,9 @@ public void OnPluginStart()
 	cv_bWardenOnly = CreateConVar("sm_souls_warden_only", "0", "Only the warden's soul will be spawned", _, true, 0.0, true, 1.0);
 	cv_iCreditsForRespawn = CreateConVar("sm_souls_credits_on_respawn", "0", "Store credits a client will get respawning a player", _, true, 0.0);
 	cv_iCreditsForSteal = CreateConVar("sm_souls_credits_on_steal", "0", "Store credits a client will get stealing a player's soul", _, true, 0.0);
+	cv_bEnableSteal = CreateConVar("sm_souls_enable_stealing", "1", "Choose if stealing a soul is enabled or not", _, true, 0.0, true, 1.0);
+	cv_bEnableRespawn = CreateConVar("sm_souls_enable_respawning", "1", "Choose if respawning players is enabled or not", _, true, 0.0, true, 1.0);
+	cv_bDisableOnLR = CreateConVar("sm_souls_disable_on_lr", "1", "Should souls not be spawned when Last Request is available? (Only for JailBreak servers)", _, true, 0.0, true, 1.0);
 	
 	HookConVarChange(cv_bSQL, CvarChange);
 	
@@ -256,28 +261,36 @@ public void OnMapStart()
 	PrecacheSound("galaxy/orb/lr_despawn/desp_4.wav");
 }
 
-public void Event_RoundStart(Event event, char[] name, bool dontBroadcast)
+public void Event_RoundEnd(Event event, char[] name, bool dontBroadcast)
 {
-	if (getPlayerCount(2) != 1)
-		bLRAvailable = false;
+	bLRAvailable = false;
 }
 
 public void Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
 {
-	if (bHosties && bLRAvailable || bMyJB && MyJailbreak_IsEventDayRunning())return;
+	if (bHosties && cv_bDisableOnLR.BoolValue && bLRAvailable || bMyJB && MyJailbreak_IsEventDayRunning())return;
 	int userid = event.GetInt("userid");
-	if (bWarden && cv_bWardenOnly.BoolValue && iWarden != GetClientOfUserId(userid))return;
-	if (GetClientTeam(GetClientOfUserId(userid)) == 3 || GetClientTeam(GetClientOfUserId(userid)) == 2)
+	int client = GetClientOfUserId(userid);
+	if (bWarden && cv_bWardenOnly.BoolValue && iWarden != client)return;
+	if (GetClientTeam(client) == 3 || GetClientTeam(client) == 2)
 	{
-		GetEntPropVector(GetEntPropEnt(GetClientOfUserId(userid), Prop_Send, "m_hRagdoll"), Prop_Send, "m_vecOrigin", fClientPos[GetClientOfUserId(userid)]);
-		fClientPos[GetClientOfUserId(userid)][2] += 30;
+		GetEntPropVector(GetEntPropEnt(client, Prop_Send, "m_hRagdoll"), Prop_Send, "m_vecOrigin", fClientPos[client]);
+		fClientPos[client][2] += 30;
+		float fVec[3], fHitPos[3], fEFO[3];
+		fVec[0] = 89.0;
+		TR_TraceRayFilter(fClientPos[client], fVec, MASK_SOLID, RayType_Infinite, Trace_Filter, client);
+		if (!TR_DidHit())return;
+		TR_GetEndPosition(fHitPos);
+		MakeVectorFromPoints(fClientPos[client], fHitPos, fEFO);
+		ScaleVector(fEFO, 1 - 30.0 / GetVectorDistance(fClientPos[client], fHitPos));
+		AddVectors(fClientPos[client], fEFO, fClientPos[client]);
 		CreateTimer(1.5, Timer_Ragdoll, userid, TIMER_FLAG_NO_MAPCHANGE);
 	}	
 }
 
 public Action Timer_SpawnSouls(Handle timer)
 {
-	if (bHosties && bLRAvailable || bMyJB && MyJailbreak_IsEventDayRunning())return Plugin_Continue;
+	if (bHosties && cv_bDisableOnLR.BoolValue && bLRAvailable || bMyJB && MyJailbreak_IsEventDayRunning())return Plugin_Continue;
 	int color[4];
 	float fTempPos[3];
 	for (int i = 1; i <= MaxClients; i++)
@@ -330,7 +343,7 @@ public Action Timer_SpawnSoulsSounds(Handle timer)
 
 public Action Timer_Ragdoll(Handle timer, any userid)
 {
-	if (bHosties && bLRAvailable)return Plugin_Stop;
+	if (bHosties && cv_bDisableOnLR.BoolValue && bLRAvailable)return Plugin_Stop;
 	int client = GetClientOfUserId(userid);
 	if (IsValidClient(client) && !IsPlayerAlive(client) && client)
 	{
@@ -541,6 +554,8 @@ void OnPressButtons(int client, int team, float fPos[3])
 	}
 	if (fMinDist < 50.0)
 	{
+		if (!cv_bEnableSteal.BoolValue && team != GetClientTeam(nearest) || !cv_bEnableRespawn.BoolValue && team == GetClientTeam(nearest))
+			return;
 		iTargetOfClient[client] = GetClientUserId(nearest);
 		EmitAmbientSound("galaxy/orb/start.wav", fPos, client);
 		DataPack pack[2];
@@ -619,6 +634,11 @@ public void warden_OnWardenCreated(int client)
 public void warden_OnWardenRemoved(int client)
 {
 	iWarden = -1;
+}
+
+bool Trace_Filter(int entity, int contentsMask, any data)
+{
+	return entity != data;
 }
 
 void Link(float buffer[12][3], float time, float width, int color[4], bool stella = false)
