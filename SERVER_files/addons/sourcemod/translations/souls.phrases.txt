@@ -90,4 +90,20 @@
 		"en"		"{1} is stealing your soul: <font color='#fa6e37'>{2}"
 		"it"		"{1} ti sta rubando l'anima: <font color='#fa6e37'>{2}"
 	}
+	"already interacting"
+	{
+		"#format"	"{1:N}, {2:N}"
+		"en"		"Someone else is already interacting with {1}'s soul (<font color='#fa6e37'>{2}<font color='#ffc39e'>)"
+		"it"		"Qualcuno sta già interagendo con l'anima di {1} (<font color='#fa6e37'>{2}<font color='#ffc39e'>)"
+	}
+	"soul destroyed"
+	{
+		"en"		"Your soul has been destroyed"
+		"it"		"Hai distrutto la tua anima"
+	}
+	"already no soul"
+	{
+		"en"		"You already have no soul"
+		"it"		"Non hai già un anima"
+	}
 }

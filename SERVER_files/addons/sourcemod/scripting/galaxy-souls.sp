@@ -82,7 +82,6 @@ public void OnPluginStart()
 	colors = new StringMap();
 	targets = new StringMap();
 	LoadTranslations("souls.phrases");
-	
 	cv_iInteractionTime = CreateConVar("sm_souls_interact_time", "6", "Time required to steal/respawn a soul");
 	cv_iSoulsTeam = CreateConVar("sm_souls_teams", "3", "For which teams should souls be spawned (1 = only Ts, 2 = only CTs, 3 = BOTH)", _, true, 1.0, true, 3.0); //I guess only works for csgo
 	cv_bSQL = CreateConVar("sm_souls_enable_sql", "0", "Enable support for SQL", _, true, 0.0, true, 1.0);
@@ -94,17 +93,16 @@ public void OnPluginStart()
 	cv_bEnableSteal = CreateConVar("sm_souls_enable_stealing", "1", "Choose if stealing a soul is enabled or not", _, true, 0.0, true, 1.0);
 	cv_bEnableRespawn = CreateConVar("sm_souls_enable_respawning", "1", "Choose if respawning players is enabled or not", _, true, 0.0, true, 1.0);
 	cv_bDisableOnLR = CreateConVar("sm_souls_disable_on_lr", "1", "Should souls not be spawned when Last Request is available? (Only for JailBreak servers)", _, true, 0.0, true, 1.0);
-	
 	HookConVarChange(cv_bSQL, CvarChange);
-	
 	AutoExecConfig();
-	
 	if (cv_bSQL.BoolValue)
 	{
 		char sConf[64];
 		cv_sDBconf.GetString(sConf, sizeof(sConf));
 		Database.Connect(CB_connect, sConf);
 	}
+	RegConsoleCmd("sm_des", Command_Destroy, "Destroys your soul");
+	RegConsoleCmd("sm_destroy", Command_Destroy, "Destroys your soul");
 }
 
 public void CvarChange(ConVar convar, const char[] oldValue, const char[] newValue)
@@ -246,19 +244,19 @@ public void OnMapStart()
 {
 	g_iBeamSprite = PrecacheModel("materials/sprites/laserbeam.vmt");
 	g_iHaloSprite = PrecacheModel("materials/sprites/glow01.vmt");
-	PrecacheSound("galaxy/orb/CT_revive/revive_1.wav");
-	PrecacheSound("galaxy/orb/CT_revive/revive_2.wav");
-	PrecacheSound("galaxy/orb/orb/energy_bg4.wav");
-	PrecacheSound("galaxy/orb/orb/orb_spawn.wav");
-	PrecacheSound("galaxy/orb/T_steal/steal_1.wav");
-	PrecacheSound("galaxy/orb/T_steal/steal_2.wav");
-	PrecacheSound("galaxy/orb/T_steal/steal_3.wav");
-	PrecacheSound("galaxy/orb/start.wav");
-	PrecacheSound("galaxy/orb/end.wav");
-	PrecacheSound("galaxy/orb/lr_despawn/desp_1.wav");
-	PrecacheSound("galaxy/orb/lr_despawn/desp_2.wav");
-	PrecacheSound("galaxy/orb/lr_despawn/desp_3.wav");
-	PrecacheSound("galaxy/orb/lr_despawn/desp_4.wav");
+	DownloadAndPrecacheSound("galaxy/orb/CT_revive/revive_1.wav");
+	DownloadAndPrecacheSound("galaxy/orb/CT_revive/revive_2.wav");
+	DownloadAndPrecacheSound("galaxy/orb/orb/energy_bg4.wav");
+	DownloadAndPrecacheSound("galaxy/orb/orb/orb_spawn.wav");
+	DownloadAndPrecacheSound("galaxy/orb/T_steal/steal_1.wav");
+	DownloadAndPrecacheSound("galaxy/orb/T_steal/steal_2.wav");
+	DownloadAndPrecacheSound("galaxy/orb/T_steal/steal_3.wav");
+	DownloadAndPrecacheSound("galaxy/orb/start.wav");
+	DownloadAndPrecacheSound("galaxy/orb/end.wav");
+	DownloadAndPrecacheSound("galaxy/orb/lr_despawn/desp_1.wav");
+	DownloadAndPrecacheSound("galaxy/orb/lr_despawn/desp_2.wav");
+	DownloadAndPrecacheSound("galaxy/orb/lr_despawn/desp_3.wav");
+	DownloadAndPrecacheSound("galaxy/orb/lr_despawn/desp_4.wav");
 }
 
 public void Event_RoundEnd(Event event, char[] name, bool dontBroadcast)
@@ -537,6 +535,21 @@ public Action Timer_Respawn(Handle timer, DataPack pack)
 	pack.Close();
 }
 
+public Action Command_Destroy(int client, int args)
+{
+	if (!bSoul[client])
+	{
+		PrintHintText(client, "<font color='#ffc39e'>%t", "already no soul");
+		return Plugin_Handled;
+	}
+	PrintHintText(client, "<font color='#ffc39e'>%t", "soul destroyed");
+	bSoul[client] = false;
+	char sSound[PLATFORM_MAX_PATH];
+	Format(sSound, sizeof(sSound), "galaxy/orb/lr_despawn/desp_%i.wav", GetRandomInt(1, 4));
+	EmitAmbientSound(sSound, fClientPos[client]);
+	return Plugin_Handled;
+}
+
 void OnPressButtons(int client, int team, float fPos[3])
 {
 	bPressingButtons[client] = true;
@@ -567,7 +580,7 @@ void OnPressButtons(int client, int team, float fPos[3])
 			IntToString(i, sClient, sizeof(sClient));
 			if (targets.GetValue(sClient, target) && target == nearest)
 			{
-				PrintHintText(client, "<font color='#ffc39e'>Qualcuno sta già interagendo con l'anima di %N (<font color='#fa6e37'>%N<font color='#ffc39e'>)", target, i);
+				PrintHintText(client, "%t", "already interacting", target, i);
 				return;
 			}
 		}
@@ -720,4 +733,12 @@ void Link(float buffer[12][3], float time, float width, int color[4], bool stell
 	TE_SendToAll();
 	TE_SetupBeamPoints(buffer[9], buffer[11], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
 	TE_SendToAll();
-} 
+}
+
+void DownloadAndPrecacheSound(char[] path)
+{
+	char sFile[PLATFORM_MAX_PATH];
+	Format(sFile, sizeof(sFile), "sound/%s", path);
+	AddFileToDownloadsTable(sFile);
+	PrecacheSound(path);
+}
