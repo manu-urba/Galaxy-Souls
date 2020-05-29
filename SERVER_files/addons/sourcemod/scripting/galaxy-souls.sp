@@ -273,7 +273,7 @@ public void Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast
 	if (GetClientTeam(client) == 3 || GetClientTeam(client) == 2)
 	{
 		GetEntPropVector(GetEntPropEnt(client, Prop_Send, "m_hRagdoll"), Prop_Send, "m_vecOrigin", fClientPos[client]);
-		fClientPos[client][2] += 5;
+		fClientPos[client][2] += 30;
 		float fVec[3], fHitPos[3], fEFO[3];
 		fVec[0] = 89.0;
 		TR_TraceRayFilter(fClientPos[client], fVec, MASK_SOLID, RayType_Infinite, Trace_Filter, client);
