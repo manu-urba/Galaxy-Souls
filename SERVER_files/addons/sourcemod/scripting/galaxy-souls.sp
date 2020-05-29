@@ -273,7 +273,7 @@ public void Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast
 	if (GetClientTeam(client) == 3 || GetClientTeam(client) == 2)
 	{
 		GetEntPropVector(GetEntPropEnt(client, Prop_Send, "m_hRagdoll"), Prop_Send, "m_vecOrigin", fClientPos[client]);
-		fClientPos[client][2] += 30;
+		fClientPos[client][2] += 5;
 		float fVec[3], fHitPos[3], fEFO[3];
 		fVec[0] = 89.0;
 		TR_TraceRayFilter(fClientPos[client], fVec, MASK_SOLID, RayType_Infinite, Trace_Filter, client);
@@ -357,6 +357,7 @@ public Action Timer_Ragdoll(Handle timer, any userid)
 public Action OnPlayerRunCmd(int client, int & buttons, int & impulse, float vel[3], float angles[3], int & weapon, int & subtype, int & cmdnum, int & tickcount, int & seed, int mouse[2])
 {
 	float fPos[3];
+	if (!IsValidClient(client))return Plugin_Continue;
 	GetClientAbsOrigin(client, fPos);
 	fPos[2] += 30;
 	if (bPressingButtons[client] && bFoundTarget[client] && buttons & IN_ATTACK && cv_bDisableAttack.BoolValue)
@@ -471,14 +472,12 @@ public Action Timer_Hint(Handle timer, DataPack pack)
 		IntToString(client, sClient, sizeof(sClient));
 		targets.SetValue(sClient, 0);
 		bFoundTarget[client] = false;
-		pack.Close();
 		KillTimerSafe(hTimer[client]);
 		bTimerSecActive[client] = false;
 		return Plugin_Stop;
 	}
 	if (!bPressingButtons[client] || !bFoundTarget[client])
 	{
-		pack.Close();
 		bTimerSecActive[client] = false;
 		return Plugin_Stop;
 	}
@@ -505,7 +504,9 @@ public Action Timer_Respawn(Handle timer, DataPack pack)
 	int team = pack.ReadCell();
 	bTimerActive[client] = false;
 	bFoundTarget[client] = false;
-	float fPos[3];
+	float fPos[3], fTpPos[3];
+	for (int i = 0; i < 3; i++)
+		fTpPos[i] = fClientPos[target][i];
 	GetClientAbsOrigin(client, fPos);
 	fPos[2] += 30;
 	EmitAmbientSound("galaxy/orb/end.wav", fPos, client);
@@ -517,7 +518,23 @@ public Action Timer_Respawn(Handle timer, DataPack pack)
 		if (team == GetClientTeam(target))
 		{
 			CS_RespawnPlayer(target);
-			TeleportEntity(target, fClientPos[target]);
+			TeleportEntity(target, fTpPos);
+			/*if (IsClientStuck(target))
+			{
+				for (int i = 0; i <= 7; i++)
+				{
+					if (i == 7)
+					{
+						ForcePlayerSuicide(target);
+						return;
+					}
+					fTpPos[2] -= 5;
+					TeleportEntity(target, fTpPos);
+					if (IsClientStuck(target))
+						continue;
+					break;
+				}
+			}*/
 			if (GetPlayerWeaponSlot(target, CS_SLOT_KNIFE) == -1)
 				GivePlayerItem(target, "weapon_knife");
 			int r = GetRandomInt(0, 1);
@@ -532,7 +549,6 @@ public Action Timer_Respawn(Handle timer, DataPack pack)
 			EmitAmbientSound(sSound, fPos, client);
 		}
 	}
-	pack.Close();
 }
 
 public Action Command_Destroy(int client, int args)
@@ -571,7 +587,6 @@ void OnPressButtons(int client, int team, float fPos[3])
 			return;
 		iTargetOfClient[client] = GetClientUserId(nearest);
 		EmitAmbientSound("galaxy/orb/start.wav", fPos, client);
-		DataPack pack[2];
 		for (int i = 1; i <= MaxClients; i++)
 		{
 			if (!IsValidClient(i, false))continue;
@@ -591,22 +606,18 @@ void OnPressButtons(int client, int team, float fPos[3])
 		char sClient[6];
 		IntToString(client, sClient, sizeof(sClient));
 		targets.SetValue(sClient, nearest);
-		pack[0] = new DataPack();
-		pack[1] = new DataPack();
-		pack[0].WriteCell(GetClientUserId(client));
-		pack[1].WriteCell(GetClientUserId(client));
-		pack[0].WriteCell(GetClientUserId(nearest));
-		pack[1].WriteCell(GetClientUserId(nearest));
-		pack[0].WriteCell(team);
-		pack[1].WriteCell(team);
+		DataPack pack = new DataPack();
+		pack.WriteCell(GetClientUserId(client));
+		pack.WriteCell(GetClientUserId(nearest));
+		pack.WriteCell(team);
 		bFoundTarget[client] = true;
-		hTimer[client] = CreateTimer(float(cv_iInteractionTime.IntValue), Timer_Respawn, pack[0], TIMER_FLAG_NO_MAPCHANGE);
+		hTimer[client] = CreateTimer(float(cv_iInteractionTime.IntValue), Timer_Respawn, CloneHandle(view_as<DataPack>(pack)), TIMER_FLAG_NO_MAPCHANGE | TIMER_HNDL_CLOSE);
 		bTimerActive[client] = true;
 		bTimerSecActive[client] = true;
 		iRespTime[client] = cv_iInteractionTime.IntValue;
 		if (!cv_iInteractionTime.IntValue)
 		{
-			pack[1].Close();
+			pack.Close();
 			PrintHintText(client, "<font color='#fa6e37'>%t", "you respawned", nearest);
 			PrintHintText(nearest, "<font color='#fa6e37'>%t", "you have been respawned", client);
 			if (cv_bSQL.BoolValue)
@@ -617,9 +628,10 @@ void OnPressButtons(int client, int team, float fPos[3])
 				db.Query(CB_Simple, sQuery);
 			}
 			return;
-		}	
-		hSecTimer[client] = CreateTimer(1.0, Timer_Hint, pack[1], TIMER_FLAG_NO_MAPCHANGE | TIMER_REPEAT);
+		}
+		hSecTimer[client] = CreateTimer(1.0, Timer_Hint, CloneHandle(view_as<DataPack>(pack)), TIMER_FLAG_NO_MAPCHANGE | TIMER_REPEAT | TIMER_HNDL_CLOSE);
 		TriggerTimer(hSecTimer[client]);
+		pack.Close();
 	}
 }
 
