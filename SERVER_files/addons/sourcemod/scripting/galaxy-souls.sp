@@ -411,7 +411,6 @@ public Action Timer_Hint(Handle timer, DataPack pack)
 	int team = pack.ReadCell();
 	float fPos[3];
 	GetEntPropVector(client, Prop_Send, "m_vecOrigin", fPos);
-	
 	if (!iRespTime[client])
 	{
 		if (team == GetClientTeam(target))
@@ -474,11 +473,13 @@ public Action Timer_Hint(Handle timer, DataPack pack)
 		bFoundTarget[client] = false;
 		KillTimerSafe(hTimer[client]);
 		bTimerSecActive[client] = false;
+		hSecTimer[client] = INVALID_HANDLE;
 		return Plugin_Stop;
 	}
 	if (!bPressingButtons[client] || !bFoundTarget[client])
 	{
 		bTimerSecActive[client] = false;
+		hSecTimer[client] = INVALID_HANDLE;
 		return Plugin_Stop;
 	}
 	if (team == GetClientTeam(target))
