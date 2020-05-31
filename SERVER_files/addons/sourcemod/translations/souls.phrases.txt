@@ -68,31 +68,31 @@
 	}
 	"respawning"
 	{
-		"#format"	"{1:N}, {2:i}" //2 = seconds left
+		"#format"	"{1:N},{2:i}" //2 = seconds left
 		"en"		"You're respawning {1}: <font color='#fa6e37'>{2}"
 		"it"		"Stai rianimando {1}: <font color='#fa6e37'>{2}"
 	}
 	"respawning passive"
 	{
-		"#format"	"{1:N}, {2:i}"
+		"#format"	"{1:N},{2:i}"
 		"en"		"{1} is respawning you: <font color='#fa6e37'>{2}"
 		"it"		"{1} ti sta rianimando: <font color='#fa6e37'>{2}"
 	}
 	"stealing"
 	{
-		"#format"	"{1:N}, {2:i}"
+		"#format"	"{1:N},{2:i}"
 		"en"		"You're stealing {1}'s soul: <font color='#fa6e37'>{2}"
 		"it"		"Stai rubando l'anima a {1}: <font color='#fa6e37'>{2}"
 	}
 	"stealing passive"
 	{
-		"#format"	"{1:N}, {2:i}"
+		"#format"	"{1:N},{2:i}"
 		"en"		"{1} is stealing your soul: <font color='#fa6e37'>{2}"
 		"it"		"{1} ti sta rubando l'anima: <font color='#fa6e37'>{2}"
 	}
 	"already interacting"
 	{
-		"#format"	"{1:N}, {2:N}"
+		"#format"	"{1:N},{2:N}"
 		"en"		"Someone else is already interacting with {1}'s soul (<font color='#fa6e37'>{2}<font color='#ffc39e'>)"
 		"it"		"Qualcuno sta già interagendo con l'anima di {1} (<font color='#fa6e37'>{2}<font color='#ffc39e'>)"
 	}

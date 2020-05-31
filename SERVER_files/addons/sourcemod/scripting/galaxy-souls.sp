@@ -500,6 +500,7 @@ public Action Timer_Respawn(Handle timer, DataPack pack)
 {
 	pack.Reset();
 	int client = GetClientOfUserId(pack.ReadCell());
+	hTimer[client] = INVALID_HANDLE;
 	int target = GetClientOfUserId(pack.ReadCell());
 	int team = pack.ReadCell();
 	bTimerActive[client] = false;
