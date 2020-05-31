@@ -375,12 +375,12 @@ public Action OnPlayerRunCmd(int client, int & buttons, int & impulse, float vel
 		{
 			if (bTimerActive[client])
 			{
-				KillTimer(hTimer[client]);
+				KillTimerSafe(hTimer[client]);
 				bTimerActive[client] = false;
 			}
 			if (bTimerSecActive[client])
 			{
-				KillTimer(hSecTimer[client]);
+				KillTimerSafe(hSecTimer[client]);
 				bTimerSecActive[client] = false;
 			}
 			EmitAmbientSound("galaxy/orb/end.wav", fPos, client);
