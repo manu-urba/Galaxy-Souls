@@ -5,122 +5,123 @@
 		"#format"	"{1:N}"
 		"en"		"You're no longer respawning {1}"
 		"it"		"Hai smesso di rianimare {1}"
-		"tr"            "Artik {1} kisisini yeniden dogurmuyorsun"
+		"tr"		"Artik {1} kisisini yeniden dogurmuyorsun"
 	}
 	"you respawned"
 	{
 		"#format"	"{1:N}"
 		"en"		"You respawned {1}"
 		"it"		"Hai rianimato {1}"
-		"tr"            "{1} kisisini yeniden dogurdun"
+		"tr"		"{1} kisisini yeniden dogurdun"
 	}
 	"you respawned and got credits"
 	{
 		"#format"	"{1:i},{2:N}"
 		"en"		"You got {1} credits for respawning {2}"
 		"it"		"Hai ricevuto {1} crediti per aver rianimato {2}"
-		"tr"            "{2} kisisini yeniden dogurdugun icin {1} kredi aldin"
+		"tr"		"{2} kisisini yeniden dogurdugun icin {1} kredi aldin"
 	}
 	"you have been respawned"
 	{
 		"#format"	"{1:N}"
 		"en"		"You have been respawned by {1}"
 		"it"		"{1} ti ha rianimato"
-		"tr"            "{1} tarafindan yeniden doguldun"
+		"tr"		"{1} tarafindan yeniden doguldun"
 	}
 	"soul stolen"
 	{
 		"#format"	"{1:N}"
 		"en"		"You stole {1}'s soul"
 		"it"		"Hai rubato l'anima a {1}"
-		"tr"            "{1} kisisinin ruhunu caldin"
+		"tr"		"{1} kisisinin ruhunu caldin"
 	}
 	"soul stolen and got credits"
 	{
 		"#format"	"{1:i},{2:N}"
 		"en"		"You got {1} credits for stealing {2}'s soul"
 		"it"		"Hai ricevuto {1} crediti per aver rubato l'anima a {2}"
-		"tr"            "{2} kisisinin ruhunu caldigin icin {1} kredi aldin"
+		"tr"		"{2} kisisinin ruhunu caldigin icin {1} kredi aldin"
 	}
 	"soul has been stolen"
 	{
 		"#format"	"{1:N}"
 		"en"		"Your soul has been stolen by {1}"
 		"it"		"{1} Ti ha rubato l'anima"
-		"tr"            "Ruhun {1} tarafindan calindi"
+		"tr"		"Ruhun {1} tarafindan calindi"
 	}
 	"no longer stealing"
 	{
 		"#format"	"{1:N}"
 		"en"		"You're no longer stealing {1}'s soul"
 		"it"		"Hai smesso di rubare l'anima a {1}"
-		"tr"            "Artik {1} kisisinin ruhunu calmiyorsun"
+		"tr"		"Artik {1} kisisinin ruhunu calmiyorsun"
 	}
 	"no longer respawning"
 	{
 		"#format"	"{1:N}"
 		"en"		"You're no longer respawning {1}"
 		"it"		"Hai smesso di rianimare {1}"
-		"tr"            "Artik {1} kisisini yeniden dogurmuyorsun"
+		"tr"		"Artik {1} kisisini yeniden dogurmuyorsun"
 	}
 	"no longer stealing passive"
 	{
 		"#format"	"{1:N}"
 		"en"		"{1} is not stealing your soul anymore"
 		"it"		"{1} ha smesso di rubarti l'anima"
-		"tr"            "{1} artik senin ruhunu calmiyor"
+		"tr"		"{1} artik senin ruhunu calmiyor"
 	}
 	"no longer respawning passive"
 	{
 		"#format"	"{1:N}"
 		"en"		"{1} is not respawning you anymore"
 		"it"		"{1} ha smesso di rianimarti"
-		"tr"            "{1} artik seni yeniden dogurmuyor"
+		"tr"		"{1} artik seni yeniden dogurmuyor"
 	}
 	"respawning"
 	{
 		"#format"	"{1:N},{2:i}" //2 = seconds left
 		"en"		"You're respawning {1}: <font color='#fa6e37'>{2}"
 		"it"		"Stai rianimando {1}: <font color='#fa6e37'>{2}"
-		"tr"            "{1} kisisini yeniden doguruyorsun: <font color='#fa6e37'>{2}"
+		"tr"		"{1} kisisini yeniden doguruyorsun: <font color='#fa6e37'>{2}"
 	}
 	"respawning passive"
 	{
 		"#format"	"{1:N},{2:i}"
 		"en"		"{1} is respawning you: <font color='#fa6e37'>{2}"
 		"it"		"{1} ti sta rianimando: <font color='#fa6e37'>{2}"
-		"tr"            "{1} seni yeniden doguruyor: <font color='#fa6e37'>{2}"
+		"tr"		"{1} seni yeniden doguruyor: <font color='#fa6e37'>{2}"
 	}
 	"stealing"
 	{
 		"#format"	"{1:N},{2:i}"
 		"en"		"You're stealing {1}'s soul: <font color='#fa6e37'>{2}"
 		"it"		"Stai rubando l'anima a {1}: <font color='#fa6e37'>{2}"
-		"tr"            "{1} kisisinin ruhunu caliyorsun: <font color='#fa6e37'>{2}"
+		"tr"		"{1} kisisinin ruhunu caliyorsun: <font color='#fa6e37'>{2}"
 	}
 	"stealing passive"
 	{
 		"#format"	"{1:N},{2:i}"
 		"en"		"{1} is stealing your soul: <font color='#fa6e37'>{2}"
 		"it"		"{1} ti sta rubando l'anima: <font color='#fa6e37'>{2}"
-		"tr"            "{1} senin ruhunu caliyor: <font color='#fa6e37'>{2}"
+		"tr"		"{1} senin ruhunu caliyor: <font color='#fa6e37'>{2}"
 	}
 	"already interacting"
 	{
 		"#format"	"{1:N},{2:N}"
 		"en"		"Someone else is already interacting with {1}'s soul (<font color='#fa6e37'>{2}<font color='#ffc39e'>)"
-		"it"		"Qualcuno sta già interagendo con l'anima di {1} (<font color='#fa6e37'>{2}<font color='#ffc39e'>)"		        "tr"            "Baska biri zaten {1} kisisinin ruhuyla etkilesimde (<font color='#fa6e37'>{2}<font color='#ffc39e'>)"
+		"it"		"Qualcuno sta già interagendo con l'anima di {1} (<font color='#fa6e37'>{2}<font color='#ffc39e'>)"
+		"tr"		"Baska biri zaten {1} kisisinin ruhuyla etkilesimde (<font color='#fa6e37'>{2}<font color='#ffc39e'>)"
 	}
 	"soul destroyed"
 	{
 		"en"		"Your soul has been destroyed"
 		"it"		"Hai distrutto la tua anima"
-		"tr"            "Ruhun olduruldu"
+		"tr"		"Ruhun olduruldu"
 	}
 	"already no soul"
 	{
 		"en"		"You already have no soul"
 		"it"		"Non hai già un anima"
-		"tr"            "Zaten hic ruhun yok"
+		"tr"		"Zaten hic ruhun yok"
 	}
 }
