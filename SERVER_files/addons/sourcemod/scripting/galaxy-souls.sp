@@ -2,7 +2,7 @@
  * PlayerSouls SM plugin.
  * 
  * Copyright (C) 2020  (Manuel|FrAgOrDiE)
- * https://github.com/FrAgOrDiE02
+ * https://github.com/manu-urba
  * 
  * This file is part of the PlayerSouls SourceMod plugin.
  * 
