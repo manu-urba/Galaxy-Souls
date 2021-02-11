@@ -7,6 +7,7 @@
 		"it"		"Hai smesso di rianimare {1}"
 		"tr"		"Artik {1} kisisini yeniden dogurmuyorsun"
 		"ru"		"Вы больше не возрождаете {1}"
+		"es"        "No estás reapareciendo {1}"
 	}
 	"you respawned"
 	{
@@ -15,6 +16,7 @@
 		"it"		"Hai rianimato {1}"
 		"tr"		"{1} kisisini yeniden dogurdun"
 		"ru"		"Вы возродили {1}"
+		"es"        "Respawneaste {1}"
 	}
 	"you respawned and got credits"
 	{
@@ -23,6 +25,7 @@
 		"it"		"Hai ricevuto {1} crediti per aver rianimato {2}"
 		"tr"		"{2} kisisini yeniden dogurdugun icin {1} kredi aldin"
 		"ru"		"Вы получили {1} кредитов за возрождение игрока {2}"
+		"es"        "Tienes {1} crédito por respawnear {2}"
 	}
 	"you have been respawned"
 	{
@@ -31,6 +34,7 @@
 		"it"		"{1} ti ha rianimato"
 		"tr"		"{1} tarafindan yeniden doguldun"
 		"ru"		"Вас возродил игрок {1}"
+		"es"        "Has reaparecido por {1}"
 	}
 	"soul stolen"
 	{
@@ -39,6 +43,7 @@
 		"it"		"Hai rubato l'anima a {1}"
 		"tr"		"{1} kisisinin ruhunu caldin"
 		"ru"		"Вы украли душу игрока {1}"
+		"es"        "Robaste {1} almas"
 	}
 	"soul stolen and got credits"
 	{
@@ -47,6 +52,7 @@
 		"it"		"Hai ricevuto {1} crediti per aver rubato l'anima a {2}"
 		"tr"		"{2} kisisinin ruhunu caldigin icin {1} kredi aldin"
 		"ru"		"Вы получили {1} кредитов за кражу души игрока {2}"
+		"es"        "Tienes {1} crédito por robar {2} almas"
 	}
 	"soul has been stolen"
 	{
@@ -55,6 +61,7 @@
 		"it"		"{1} Ti ha rubato l'anima"
 		"tr"		"Ruhun {1} tarafindan calindi"
 		"ru"		"Ваша душа была украдена игроком {1}"
+		"es"        "Tu alma ha sido robada por {1}"
 	}
 	"no longer stealing"
 	{
@@ -63,6 +70,7 @@
 		"it"		"Hai smesso di rubare l'anima a {1}"
 		"tr"		"Artik {1} kisisinin ruhunu calmiyorsun"
 		"ru"		"Вы больше не крадёте душу игрока {1}"
+		"es"        "Ya no estás robando {1} almas"
 	}
 	"no longer respawning"
 	{
@@ -71,6 +79,7 @@
 		"it"		"Hai smesso di rianimare {1}"
 		"tr"		"Artik {1} kisisini yeniden dogurmuyorsun"
 		"ru"		"Вы больше не возрождаете {1}"
+		"es"        "Ya no estás reapareciendo {1}"
 	}
 	"no longer stealing passive"
 	{
@@ -79,6 +88,7 @@
 		"it"		"{1} ha smesso di rubarti l'anima"
 		"tr"		"{1} artik senin ruhunu calmiyor"
 		"ru"		"Игрок {1} больше не крадёт вашу душу"
+		"es"        "No está robando tu alma de ninguna manera"
 	}
 	"no longer respawning passive"
 	{
@@ -87,6 +97,7 @@
 		"it"		"{1} ha smesso di rianimarti"
 		"tr"		"{1} artik seni yeniden dogurmuyor"
 		"ru"		"Игрок {1} больше не возрождает вас"
+		"es"        "No estás repareciendo de ninguna manera"
 	}
 	"respawning"
 	{
@@ -94,8 +105,9 @@
 		"en"		"You're respawning {1}: <font color='#fa6e37'>{2}"
 		"it"		"Stai rianimando {1}: <font color='#fa6e37'>{2}"
 		"tr"		"{1} kisisini yeniden doguruyorsun: <font color='#fa6e37'>{2}"
-		"ru"		"Вы возрождаете игрока {1}: <font color='#fa6e37'>{2}"
-	}
+ 		"ru"		"Вы возрождаете игрока {1}: <font color='#fa6e37'>{2}"
+		"es"        "Estás reapareciendo {1}: <font color='#fa6e37'>{2}"
+ 	}
 	"respawning passive"
 	{
 		"#format"	"{1:N},{2:i}"
@@ -103,6 +115,7 @@
 		"it"		"{1} ti sta rianimando: <font color='#fa6e37'>{2}"
 		"tr"		"{1} seni yeniden doguruyor: <font color='#fa6e37'>{2}"
 		"ru"		"Игрок {1} возрождает вас: <font color='#fa6e37'>{2}"
+		"es"        "{1} Te está reanimando <font color='#fa6e37'>{2}"
 	}
 	"stealing"
 	{
@@ -111,6 +124,7 @@
 		"it"		"Stai rubando l'anima a {1}: <font color='#fa6e37'>{2}"
 		"tr"		"{1} kisisinin ruhunu caliyorsun: <font color='#fa6e37'>{2}"
 		"ru"		"Вы крадёте душу игрока {1}: <font color='#fa6e37'>{2}"
+		"es"        "Estás robando {1} almas: <font color='#fa6e37'>{2}"
 	}
 	"stealing passive"
 	{
@@ -119,6 +133,7 @@
 		"it"		"{1} ti sta rubando l'anima: <font color='#fa6e37'>{2}"
 		"tr"		"{1} senin ruhunu caliyor: <font color='#fa6e37'>{2}"
 		"ru"		"Игрок {1} крадёт вашу душу: <font color='#fa6e37'>{2}"
+		"es"        "{1} está robando tu alma: <font color='#fa6e37'>{2}"
 	}
 	"already interacting"
 	{
@@ -127,6 +142,7 @@
 		"it"		"Qualcuno sta già interagendo con l'anima di {1} (<font color='#fa6e37'>{2}<font color='#ffc39e'>)"
 		"tr"		"Baska biri zaten {1} kisisinin ruhuyla etkilesimde (<font color='#fa6e37'>{2}<font color='#ffc39e'>)"
 		"ru"		"Кто-то уже взаимодействует с душой игрока {1} (<font color='#fa6e37'>{2}<font color='#ffc39e'>)"
+		"es"        "Alguien más está interactuando con {1} almas (<font color='#fa6e37'>{2}<font color='#ffc39e'>)"
 	}
 	"soul destroyed"
 	{
@@ -134,6 +150,7 @@
 		"it"		"Hai distrutto la tua anima"
 		"tr"		"Ruhun olduruldu"
 		"ru"		"Ваша душа была уничтожена"
+		"es"        "Tu alma ha sido destruída"
 	}
 	"already no soul"
 	{
@@ -141,5 +158,6 @@
 		"it"		"Non hai già un anima"
 		"tr"		"Zaten hic ruhun yok"
 		"ru"		"У вас уже нет души"
+		"es"        "Ya no tienes alma"
 	}
 }
