@@ -692,46 +692,36 @@ bool Trace_Filter(int entity, int contentsMask, any data)
 
 void Link(float buffer[12][3], float time, float width, int color[4], bool stella = false)
 {
-	TE_SetupBPAndSendToAll(buffer[0], buffer[3], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[0], buffer[5], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[0], buffer[6], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[0], buffer[8], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[0], buffer[11], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[1], buffer[9], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[1], buffer[5], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[1], buffer[6], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[1], buffer[10], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[1], buffer[2], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[2], buffer[7], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[2], buffer[4], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[2], buffer[10], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[2], buffer[9], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[3], buffer[7], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[3], buffer[11], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[3], buffer[8], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[3], buffer[4], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[4], buffer[8], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[4], buffer[7], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[4], buffer[9], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[5], buffer[8], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[5], buffer[6], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[5], buffer[9], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[6], buffer[10], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[6], buffer[11], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[7], buffer[11], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[7], buffer[10], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[7], buffer[4], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[8], buffer[9], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[10], buffer[11], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	
-	if (!stella)return;
-	
-	TE_SetupBPAndSendToAll(buffer[0], buffer[2], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[3], buffer[1], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[4], buffer[6], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[5], buffer[7], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[8], buffer[10], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
-	TE_SetupBPAndSendToAll(buffer[9], buffer[11], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
+	int numbers[10][6] = {
+		{3, 5, 6, 8, 11},
+		{9, 5, 6, 10, 2},
+		{7, 4, 10, 9},
+		{7, 11, 8, 4},
+		{8, 7, 9},
+		{8, 6, 9},
+		{10, 11},
+		{11, 10, 4},
+		{9},
+		{11}
+	}
+
+	for (int buffer_index, int i = 0; i < 10; i++) {
+		buffer_index = i == 9 ? 10 : i;
+		for (int j = 0; j < 5; j++) {
+			TE_SetupBPAndSendToAll(buffer[buffer_index], buffer[numbers[i][j]], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
+		}
+	}
+
+	if (!stella) return;
+
+	numbers = {
+		{0, 3, 4, 5, 8, 9},
+		{2, 1, 6, 7, 10, 11}
+	}
+
+	for (int i = 0; i < 10; i++) {
+		TE_SetupBPAndSendToAll(buffer[numbers[0][i]], buffer[numbers[1][i]], g_iBeamSprite, g_iHaloSprite, 0, 10, time, width, width, 1, 0.0, color, 5);
+	}
 }
 
 void TE_SetupBPAndSendToAll(const float start[3], const float end[3], int ModelIndex, int HaloIndex, int StartFrame, int FrameRate, float Life, float Width, float EndWidth, int FadeLength, float Amplitude, const int Color[4], int Speed)
